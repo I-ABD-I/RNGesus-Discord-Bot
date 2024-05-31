@@ -12,9 +12,12 @@ GUILD_ID = int(os.getenv("GUILD_ID"))  # type: ignore
 bot = discord.Bot(debug_guilds=[GUILD_ID])
 
 
-@bot.slash_command(name="muterng")
+@bot.slash_command(
+    name="muterng",
+    description="Mutes a random person for an amount of time (in seconds)",
+)
 @discord.default_permissions(mute_members=True)
-async def hello(ctx: discord.ApplicationContext) -> None:
+async def hello(ctx: discord.ApplicationContext, time: int = 20) -> None:
     voice = ctx.author.voice  # type: ignore
 
     if not voice:
@@ -30,8 +33,8 @@ async def hello(ctx: discord.ApplicationContext) -> None:
         return
 
     await user.edit(mute=True)
-    await ctx.respond(f"{user.display_name} has been muted for 20 seconds")
-    await asyncio.sleep(20)
+    await ctx.respond(f"{user.display_name} has been muted for {time} seconds")
+    await asyncio.sleep(time)
     await user.edit(mute=False)
 
 
